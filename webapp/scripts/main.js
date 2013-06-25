@@ -22,30 +22,25 @@ require.config({
     urlArgs: "version="+versionString
 });
 
+
 require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/FormDemo"],
     function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, FormDemo) {
         $(function () {
 
-            //Check the the browser supports the features we need
-            if ((!Modernizr.canvas) || (!Modernizr.canvastext) || (!Modernizr.svg)) {
-                $('#Div1').html($('#OldBrowser').html());//If not, set an error message
-                return;
-            }
+            //Initialise all the views in the application
+            Intro.init();
+            FormDemo.init();
+            GenomeBrowser.init();
 
-
-
-            Intro.create();
-            FormDemo.create();
-            GenomeBrowser.create();
-
+            //Provide a hook to fetch some data upfront from the server. Upon completion, 'proceedFunction' should be called;
             Application.customInitFunction = function(proceedFunction) {
-                //alert('fetching data...');
+                //Load data here
                 proceedFunction();
             }
 
+            //Initialise the application
             Application.init('Test application');
 
-            //Global initialisation of utilities
 
 
 

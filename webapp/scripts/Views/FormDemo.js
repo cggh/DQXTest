@@ -3,8 +3,16 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
         var FormDemoModule = {
 
-            create: function () {
+            init: function () {
                 var that = Application.View('formdemo','Form demo');
+
+                that.createFrames = function(rootFrame) {
+                }
+
+                that.createPanels = function() {
+                }
+
+
                 return that;
             }
 

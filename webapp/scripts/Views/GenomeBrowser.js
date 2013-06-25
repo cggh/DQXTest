@@ -3,8 +3,16 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
         var GenomeBrowserModule = {
 
-            create: function () {
+            init: function () {
                 var that = Application.View('genomebrowser','Genome browser');
+
+                that.createFrames = function(rootFrame) {
+                }
+
+                that.createPanels = function() {
+                }
+
+
                 return that;
             }
 
