@@ -10,7 +10,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     rootFrame.makeGroupHor();
 
                     var leftGroup = rootFrame.addMemberFrame(Framework.FrameGroupVert('', 0.5));
-                    rootFrame.addMemberFrame(Framework.FrameFinal('GenomeBrowser', 0.5));
+                    rootFrame.addMemberFrame(Framework.FrameFinal('', 0.5));
 
                     this.frameForm = leftGroup.addMemberFrame(Framework.FrameFinal('11', 0.5));
 
