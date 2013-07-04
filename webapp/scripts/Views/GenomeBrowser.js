@@ -37,7 +37,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     this.dataFetcherSNPs = new DataFetchers.Curve(MetaData.serverUrl, MetaData.database, MetaData.tableSNPInfo, 'pos');
 
                     var compid='NRAF_WAF';
-                    var defaultVisible=true;
                     var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 1 });
                     theChannel.setTitle('Channel name');
                     theChannel.setHeight(90);

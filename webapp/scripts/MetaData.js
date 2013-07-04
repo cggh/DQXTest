@@ -3,7 +3,8 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
         var MetaData = {};
 
 
-        MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server30/app";
+        MetaData.serverUrl="http://localhost:8000/app01";
+        //MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server30/app";
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Data source tables
