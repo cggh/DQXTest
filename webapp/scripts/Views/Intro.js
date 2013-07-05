@@ -36,6 +36,20 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     this.panelForm.addControl(fu);
 
 
+                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Post test", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
+                    bt.setOnChanged(function() {
+                        var datastring='';
+                        for (var i=0; i<1500; i++)
+                            datastring+='AC01';
+                        DQX.serverDataStore(MetaData.serverUrl,datastring,function(id) {
+                            DQX.serverDataFetch(MetaData.serverUrl,id,function(content) {
+                                alert('content length: '+content.length);
+                            });
+                        });
+                    })
+                    this.panelForm.addControl(bt);
+
+
                 }
 
 

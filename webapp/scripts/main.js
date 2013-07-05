@@ -1,6 +1,9 @@
 
+//Versionstring is supposed to be defines in main.html
+//It is used to differentiate different versions, preventing them from being cached
 if (typeof versionString == 'undefined')
     alert('Fatal error: versionString is missing');
+
 require.config({
     baseUrl: "scripts",
     paths: {
