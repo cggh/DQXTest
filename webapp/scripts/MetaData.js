@@ -46,6 +46,16 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
             //{ freqid:'NRAF_SEA', name:"South-east Asia", color:DQX.Color(0,0.7,0.5) }
         ];
 
+        MetaData.summaryFolder='Tracks-PfPopGen2.1';//Location of the summary data, relative to the base path defined by DQXServer
+        MetaData.summaryConfig='Summ01';//ID of the summary configuration used
+
+
+        //List of all the summary profiles displayed in the app
+        MetaData.summaryProfiles=[
+            { id:'GC300', name:"%GC" },
+            { id:'Uniqueness', name:"Uniqueness" }
+        ];
+
 
 
         return MetaData;

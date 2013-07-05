@@ -6,86 +6,104 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
             init: function () {
                 var that = Application.View('genomebrowser','Genome browser');
 
+                //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
-                    rootFrame.makeGroupHor();
-
-                    this.frameControls = rootFrame.addMemberFrame(Framework.FrameFinal('', 0.3));
-                    this.frameBrowser = rootFrame.addMemberFrame(Framework.FrameFinal('GenomeBrowser', 0.7));
+                    rootFrame.makeGroupHor();//Declare the root frame as a horizontally divided set of subframes
+                    this.frameControls = rootFrame.addMemberFrame(Framework.FrameFinal('', 0.3));//Create frame that will contain the controls panel
+                    this.frameBrowser = rootFrame.addMemberFrame(Framework.FrameFinal('', 0.7));//Create frame that will contain the genome browser panel
                 }
 
+                //This function is called during the initialisation. Create the panels that will populate the frames here
                 that.createPanels = function() {
-                    this.panelControls = Framework.Form(this.frameControls);
-
+                    this.panelControls = Framework.Form(this.frameControls);//This panel will contain controls for switching on/off channels on the genome browser
                     this.channelControls=[];//this will accumulate the check boxes that control the visibility of channels
-
                     this.createPanelBrowser();
-
-                    that.panelControls.addControl(Controls.CompoundVert(this.channelControls));
-
-                }
+                    that.panelControls.addControl(Controls.CompoundVert(this.channelControls));//Add the controls to the form, as a vertical stack
+                };
 
                 that.createPanelBrowser = function() {
 
+                    //Browser configuration settings
                     var browserConfig = {
-                        database: MetaData.database,
-                        serverURL: MetaData.serverUrl,
-                        annotTableName: MetaData.tableAnnotation,
-                        chromnrfield: 'chrom',
+                        serverURL: MetaData.serverUrl,              //Url of the DQXServer instance used
+                        database: MetaData.database,                //Database name
+                        annotTableName: MetaData.tableAnnotation,   //Name of the table containing the annotation
+                        chromnrfield: 'chrom',                      //Specifies that chromosomes are identifier by *numbers* in the field 'chrom'
+                                                                    //*NOTE*: chromosome identifiers can be used by specifying chromoIdField: 'chromid'
                         viewID: '',
-                        canZoomVert: true
+                        canZoomVert: true                           //Viewer contains buttons to alter the vertical size of the channels
                     };
+                    //Initialise a genome browser panel
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
 
                     //Define chromosomes
                     $.each(MetaData.chromosomes,function(idx,chromosome) {
-                        that.panelBrowser.addChromosome(chromosome.id, chromosome.id, chromosome.len);
+                        that.panelBrowser.addChromosome(chromosome.id, chromosome.id, chromosome.len);//provide identifier, name, and size in megabases
                     });
 
+                    that.createFrequencyChannels();
+                    that.createSummaryChannels();
+                };
 
+                that.createFrequencyChannels = function() {
+                    //Create the data fetcher that will get the frequency values from the server
+                    this.dataFetcherSNPs = new DataFetchers.Curve(
+                        MetaData.serverUrl,     //url of the DQXServer instance providing the data
+                        MetaData.database,      //name of the database
+                        MetaData.tableSNPInfo   //name of the table containing the data
+                    );
 
-
-
-
-                    this.dataFetcherSNPs = new DataFetchers.Curve(MetaData.serverUrl, MetaData.database, MetaData.tableSNPInfo, 'pos');
-
-
+                    //Create the channel in the browser that will contain the frequency values
                     var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 1 });
-                    theChannel.setTitle("Frequencies");
-                    theChannel.setHeight(120);
-                    that.panelBrowser.addChannel(theChannel, false);
+                    theChannel
+                        .setTitle("Frequencies")
+                        .setHeight(120)
+                        .setMaxViewportSizeX(5.0e5)//if more than 5e5 bases are in the viewport, this channel is not shown
+                        .setChangeYScale(false,true);//makes the scale adjustable by dragging it
+                    that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+                    //Iterate over all frequencies, and add a component to the channel
                     $.each(MetaData.populations, function(idx,population) {
-                        var plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, that.dataFetcherSNPs, population.freqid), true);
-                        plotcomp.myPlotHints.color = population.color;
-                        plotcomp.myPlotHints.pointStyle = 1;
-                        that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid,population.name, true));
+                        var plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, that.dataFetcherSNPs, population.freqid), true);//Create the component
+                        plotcomp.myPlotHints.color = population.color;//define the color of the component
+                        plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
+                        that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid,population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
                     });
 
+                }
 
 
+                that.createSummaryChannels = function() {
+                    //Create the data fetcher that will get the summary values from the server
+                    this.dataFetcherProfiles = new DataFetcherSummary.Fetcher(
+                        MetaData.serverUrl,     //url of the DQXServer instance providing the data
+                        1,                      //minimum block size of the finest grained block
+                        800                     //desired number of data points filling the viewport
+                    );
 
+                    //Iterate over all summary profiles shown by the app
+                    $.each(MetaData.summaryProfiles,function(idx,profile) {
+                        var folder=MetaData.summaryFolder+'/'+profile.id;//The server folder where to find the info, relative to the DQXServer base path
+                        var SummChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 100 });//Create the channel
+                        SummChannel
+                            .setTitle(profile.name).setHeight(120, true)
+                            .setChangeYScale(true,true);//makes the scale adjustable by dragging it
+                        that.panelBrowser.addChannel(SummChannel);//Add the channel to the browser
+                        that.channelControls.push(SummChannel.createVisibilityControl());//Create a visibility checkbox for the component, and add to the list of controls
 
+                        //Create the min-max range
+                        var colinfo_min = that.dataFetcherProfiles.addFetchColumn(folder, MetaData.summaryConfig, profile.id + "_min");//get the min value from the fetcher
+                        var colinfo_max = that.dataFetcherProfiles.addFetchColumn(folder, MetaData.summaryConfig, profile.id + "_max");//get the max value from the fetcher
+                        SummChannel.addComponent(ChannelYVals.YRange(null, that.dataFetcherProfiles, colinfo_min.myID, colinfo_max.myID, DQX.Color(0.3, 0.3, 0.7, 0.35)), true);//Define the range component
 
-                    this.dataFetcherProfiles = new DataFetcherSummary.Fetcher(MetaData.serverUrl, 1, 600);
+                        //Create the average value profile
+                        var colinfo_avg = that.dataFetcherProfiles.addFetchColumn(folder, MetaData.summaryConfig, profile.id + "_avg");//get the avg value from the fetcher
+                        var comp = SummChannel.addComponent(ChannelYVals.Comp(null, that.dataFetcherProfiles, colinfo_avg.myID), true);//Add the profile to the channel
+                        comp.setColor(DQX.Color(0, 0, 0.5));
+                        comp.myPlotHints.makeDrawLines(3000000.0); //that causes the points to be connected with lines
+                        comp.myPlotHints.interruptLineAtAbsent = true;
+                        comp.myPlotHints.drawPoints = false;
 
-                    var profid='GC300';
-                    var folder='Tracks-PfPopGen2.1/GC300';
-                    var config='Summ01';
-                    var SummChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 100 });
-                    SummChannel.setTitle('Title');
-                    SummChannel.setHeight(120, true);
-                    that.panelBrowser.addChannel(SummChannel);
-                    that.channelControls.push(SummChannel.createVisibilityControl());
-
-                    var colinfo_min = this.dataFetcherProfiles.addFetchColumn(folder, config, profid + "_min");
-                    var colinfo_max = this.dataFetcherProfiles.addFetchColumn(folder, config, profid + "_max");
-                    SummChannel.addComponent(ChannelYVals.YRange(null, this.dataFetcherProfiles, colinfo_min.myID, colinfo_max.myID, DQX.Color(0.3, 0.3, 0.7, 0.25)), true);
-
-                    var colinfo_avg = this.dataFetcherProfiles.addFetchColumn(folder, config, profid + "_avg");
-                    var comp = SummChannel.addComponent(ChannelYVals.Comp(null, this.dataFetcherProfiles, colinfo_avg.myID), true);
-                    comp.setColor(DQX.Color(0, 0, 0.5));
-                    comp.myPlotHints.makeDrawLines(3000000.0); //This causes the points to be connected with lines
-                    comp.myPlotHints.interruptLineAtAbsent = true;
-                    comp.myPlotHints.drawPoints = false;
+                    })
 
                 }
 
