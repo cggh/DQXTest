@@ -8,7 +8,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
-                    rootFrame.makeGroupHor();
+                    rootFrame.makeGroupHor();//Define the root frame as a horizontal layout of member frames
 
                     var leftGroup = rootFrame.addMemberFrame(Framework.FrameGroupVert('', 0.5));
                     rootFrame.addMemberFrame(Framework.FrameFinal('', 0.5));

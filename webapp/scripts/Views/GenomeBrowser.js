@@ -6,12 +6,16 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
             init: function () {
                 var that = Application.View('genomebrowser','Genome browser');
 
+
+
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
                     rootFrame.makeGroupHor();//Declare the root frame as a horizontally divided set of subframes
                     this.frameControls = rootFrame.addMemberFrame(Framework.FrameFinal('', 0.3));//Create frame that will contain the controls panel
                     this.frameBrowser = rootFrame.addMemberFrame(Framework.FrameFinal('', 0.7));//Create frame that will contain the genome browser panel
                 }
+
+
 
                 //This function is called during the initialisation. Create the panels that will populate the frames here
                 that.createPanels = function() {
@@ -20,6 +24,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     this.createPanelBrowser();
                     that.panelControls.addControl(Controls.CompoundVert(this.channelControls));//Add the controls to the form, as a vertical stack
                 };
+
 
                 that.createPanelBrowser = function() {
 
@@ -45,6 +50,8 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     that.createSummaryChannels();
                 };
 
+
+
                 that.createFrequencyChannels = function() {
                     //Create the data fetcher that will get the frequency values from the server
                     this.dataFetcherSNPs = new DataFetchers.Curve(
@@ -68,8 +75,9 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
                         that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid,population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
                     });
-
                 }
+
+
 
 
                 that.createSummaryChannels = function() {

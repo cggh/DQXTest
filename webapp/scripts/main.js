@@ -4,6 +4,7 @@
 if (typeof versionString == 'undefined')
     alert('Fatal error: versionString is missing');
 
+//Configuration of require.js
 require.config({
     baseUrl: "scripts",
     paths: {
@@ -34,6 +35,8 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryMa
             Intro.init();
             FormDemo.init();
             GenomeBrowser.init();
+
+            Application.setHeader('Here comes the application header');
 
             //Provide a hook to fetch some data upfront from the server. Upon completion, 'proceedFunction' should be called;
             Application.customInitFunction = function(proceedFunction) {
