@@ -14,6 +14,18 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                 }
 
                 that.createPanels = function() {
+                    this.panelControls = Framework.Form(this.frameControls);
+
+                    this.channelControls=[];//this will accumulate the check boxes that control the visibility of channels
+
+                    this.createPanelBrowser();
+
+                    that.panelControls.addControl(Controls.CompoundVert(this.channelControls));
+
+                }
+
+                that.createPanelBrowser = function() {
+
                     var browserConfig = {
                         database: MetaData.database,
                         serverURL: MetaData.serverUrl,
@@ -36,14 +48,18 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                     this.dataFetcherSNPs = new DataFetchers.Curve(MetaData.serverUrl, MetaData.database, MetaData.tableSNPInfo, 'pos');
 
-                    var compid='NRAF_WAF';
+
                     var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 1 });
-                    theChannel.setTitle('Channel name');
-                    theChannel.setHeight(90);
-                    this.panelBrowser.addChannel(theChannel, false);
-                    plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, this.dataFetcherSNPs, compid), true);
-                    plotcomp.myPlotHints.color = DQX.Color(0, 0, 0);
-                    plotcomp.myPlotHints.pointStyle = 1;
+                    theChannel.setTitle("Frequencies");
+                    theChannel.setHeight(120);
+                    that.panelBrowser.addChannel(theChannel, false);
+                    $.each(MetaData.populations, function(idx,population) {
+                        var plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, that.dataFetcherSNPs, population.freqid), true);
+                        plotcomp.myPlotHints.color = population.color;
+                        plotcomp.myPlotHints.pointStyle = 1;
+                        that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid,population.name, true));
+                    });
+
 
 
 
@@ -58,6 +74,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     SummChannel.setTitle('Title');
                     SummChannel.setHeight(120, true);
                     that.panelBrowser.addChannel(SummChannel);
+                    that.channelControls.push(SummChannel.createVisibilityControl());
 
                     var colinfo_min = this.dataFetcherProfiles.addFetchColumn(folder, config, profid + "_min");
                     var colinfo_max = this.dataFetcherProfiles.addFetchColumn(folder, config, profid + "_max");

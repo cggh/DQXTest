@@ -4,7 +4,7 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
 
 
         MetaData.serverUrl="http://localhost:8000/app01";
-        //MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server30/app";
+        //MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server_test/app";
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Data source tables
@@ -38,6 +38,14 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
             { id: 'MAL14', len: 4 }
         ];
         $.each(MetaData.chromosomes, function (idx, chr) { chr.name = chr.id; });
+
+
+        MetaData.populations=[
+            { freqid:'NRAF_WAF', name:"West Africa", color:DQX.Color(1,0,0) },
+            { freqid:'NRAF_EAF', name:"East Africa", color:DQX.Color(0,0,1) }
+            //{ freqid:'NRAF_SEA', name:"South-east Asia", color:DQX.Color(0,0.7,0.5) }
+        ];
+
 
 
         return MetaData;
