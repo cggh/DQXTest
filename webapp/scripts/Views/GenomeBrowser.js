@@ -46,6 +46,12 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         that.panelBrowser.addChromosome(chromosome.id, chromosome.id, chromosome.len);//provide identifier, name, and size in megabases
                     });
 
+                    //Define the action when a user clicks on a gene in the annotation channel
+                    this.panelBrowser.getAnnotationChannel().handleFeatureClicked = function (geneID) {
+                        alert('Clicked on gene '+geneID);
+                    }
+
+
                     that.createFrequencyChannels();
                     that.createSummaryChannels();
                 };
