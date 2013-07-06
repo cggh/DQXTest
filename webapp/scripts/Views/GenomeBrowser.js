@@ -51,7 +51,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                 };
 
 
-
+                //Creates the channel in the browser that displays allele frequencies
                 that.createFrequencyChannels = function() {
                     //Create the data fetcher that will get the frequency values from the server
                     this.dataFetcherSNPs = new DataFetchers.Curve(
@@ -60,26 +60,45 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         MetaData.tableSNPInfo   //name of the table containing the data
                     );
 
+                    //add snpid column to the datafetcher, not plotted but needed for the tooltip & click actions
+                    this.dataFetcherSNPs.addFetchColumnActive("snpid", "String");
+
                     //Create the channel in the browser that will contain the frequency values
                     var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 1 });
                     theChannel
-                        .setTitle("Frequencies")
-                        .setHeight(120)
-                        .setMaxViewportSizeX(5.0e5)//if more than 5e5 bases are in the viewport, this channel is not shown
-                        .setChangeYScale(false,true);//makes the scale adjustable by dragging it
+                        .setTitle("Frequencies")        //sets the title of the channel
+                        .setHeight(120)                 //sets the height of the channel, in pixels
+                        .setMaxViewportSizeX(5.0e5)     //if more than 5e5 bases are in the viewport, this channel is not shown
+                        .setChangeYScale(false,true);   //makes the scale adjustable by dragging it
                     that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+
                     //Iterate over all frequencies, and add a component to the channel
                     $.each(MetaData.populations, function(idx,population) {
                         var plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, that.dataFetcherSNPs, population.freqid), true);//Create the component
                         plotcomp.myPlotHints.color = population.color;//define the color of the component
                         plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
-                        that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid,population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
+                        that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid, population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
                     });
+
+                    //Define the tooltip shown when a user hovers the mouse over a point in the channel
+                    theChannel.getToolTipContent = function(compID, pointIndex) {
+                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");
+                        var value = that.dataFetcherSNPs.getColumnPoint(pointIndex, compID);
+                        return snpid+'<br/>'+compID+'= '+value.toFixed(3);
+                    };
+
+                    //Define the action when a user clicks on a point in the channel
+                    theChannel.handlePointClicked = function(compID, pointIndex) {
+                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");
+                        alert('SNP id: '+snpid);
+                        //Msg.send({ type: 'ShowSNPPopup' }, snpid);
+                    };
                 }
 
 
 
 
+                //Creates channels in the browser that displaying various summary properties
                 that.createSummaryChannels = function() {
                     //Create the data fetcher that will get the summary values from the server
                     this.dataFetcherProfiles = new DataFetcherSummary.Fetcher(
