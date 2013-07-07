@@ -76,6 +76,10 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     this.dataFetcherSNPs.addFetchColumnActive("snpid", "String");
 
                     //Fill with channels
+
+                    //Define a channel displaying the reference sequence
+                    this.panelBrowser.addChannel(ChannelSequence.Channel(serverUrl, MetaData.summaryFolder+'/'+'Sequence', 'Summ01'), true);
+
                     that.createSnpPositionChannel();
                     that.createFrequencyChannels();
                     that.createSummaryChannels();

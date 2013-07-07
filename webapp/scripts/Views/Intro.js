@@ -23,6 +23,12 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     })
                     this.panelForm.addControl(bt);
 
+                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Table viewer", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
+                    bt.setOnChanged(function() {
+                        Application.activateView('tableviewer');
+                    })
+                    this.panelForm.addControl(bt);
+
                     var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Form demo", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
                     bt.setOnChanged(function() {
                         Application.activateView('formdemo');

@@ -27,14 +27,15 @@ require.config({
 });
 
 
-require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/FormDemo"],
-    function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, FormDemo) {
+require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo"],
+    function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, TableViewer, FormDemo) {
         $(function () {
 
             //Initialise all the views in the application
             Intro.init();
             FormDemo.init();
             GenomeBrowser.init();
+            TableViewer.init();
 
             Application.setHeader('Here comes the application header');
 
