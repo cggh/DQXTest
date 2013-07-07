@@ -94,6 +94,14 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         'MutType',               // Name of the column containing a categorical string value that determines the color of the snp
                         { 'S' :  DQX.Color(1,1,0) , 'N' : DQX.Color(1,0.4,0) }   //Map of value-color pairs
                     );
+                    //Define a custom tooltip
+                    theChannel.setToolTipHandler(function(snpid) {
+                        return 'SNP: '+snpid;
+                    })
+                    //Define a function tht will be called when the user clicks a snp
+                    theChannel.setClickHandler(function(snpid) {
+                        alert('SNP id: '+snpid);
+                    })
                     that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
                 }
 
