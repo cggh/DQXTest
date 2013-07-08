@@ -4,7 +4,11 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
         var FormDemoModule = {
 
             init: function () {
-                var that = Application.View('formdemo','Form demo');
+                // Instantiate the view object
+                var that = Application.View(
+                    'formdemo',     // View ID
+                    'Form demo'     // View title
+                );
 
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {

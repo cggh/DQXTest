@@ -4,7 +4,11 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
         var IntroModule = {
 
             init: function () {
-                var that = Application.View('start','Start page');
+                // Instantiate the view object
+                var that = Application.View(
+                    'start',        // View ID
+                    'Start page'    // View title
+                );
 
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
