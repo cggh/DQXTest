@@ -40,7 +40,8 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryMa
             GenomeBrowser.init();
             TableViewer.init();
 
-            Application.setHeader('Here comes the application header');
+            //Define the header content (top-left of the window)
+            Application.setHeader('<a href="http://www.malariagen.net" target="_blank"><img src="Bitmaps/malariagen_logo.png" alt="MalariaGEN logo" align="top" style="border:0px;margin:7px"/></a>');
 
             //Provide a hook to fetch some data upfront from the server. Upon completion, 'proceedFunction' should be called;
             Application.customInitFunction = function(proceedFunction) {
