@@ -120,7 +120,8 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     comp.setToolTip('SNP identifier');  // Hover tooltip
                     // Define a handler that will be called when a user clicks this column (note: this will turn this field into a hyperlink)
                     comp.setCellClickHandler(function(fetcher,downloadrownr) {
-                        alert('Clicked on snp '+fetcher.getColumnPoint(downloadrownr, 'snpid'));
+                        var snpid = fetcher.getColumnPoint(downloadrownr, 'snpid');  // get the snp id from the datafetcher
+                        Msg.send({ type: 'ShowSNPPopup' }, snpid); // Send a message that should trigger showing the snp popup
                     })
 
                     //Create a column for each population frequency

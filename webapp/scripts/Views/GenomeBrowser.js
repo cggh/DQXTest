@@ -108,7 +108,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     })
                     //Define a function tht will be called when the user clicks a snp
                     theChannel.setClickHandler(function(snpid) {
-                        alert('SNP id: '+snpid);
+                        Msg.send({ type: 'ShowSNPPopup' }, snpid);//Send a message that should trigger showing the snp popup
                     })
                     that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
                 }
@@ -142,9 +142,8 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                     //Define the action when a user clicks on a point in the channel
                     theChannel.handlePointClicked = function(compID, pointIndex) {
-                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");
-                        alert('SNP id: '+snpid);
-                        //Msg.send({ type: 'ShowSNPPopup' }, snpid);
+                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");//Get the snp id from the datafetcher
+                        Msg.send({ type: 'ShowSNPPopup' }, snpid);//Send a message that should trigger showing the snp popup
                     };
                 }
 
