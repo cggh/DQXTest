@@ -21,23 +21,32 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                     this.panelForm = Framework.Form(this.rootFrame);//Create a panel of the type 'form'
                     this.panelForm.setPadding(10);
 
-                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Genome browser", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
-                    bt.setOnChanged(function() {
-                        Application.activateView('genomebrowser');
-                    })
-                    this.panelForm.addControl(bt);
+                    //Create start buttons for the views
+                    this.panelForm.addControl(
+                        Application.getView('genomebrowser').createActivationButton({       //View ID
+                            content: "Genome browser",                                      // Button text
+                            bitmap:DQX.BMP('arrow4down.png')                                // Button bitmap
+                        }));
 
-                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Table viewer", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
-                    bt.setOnChanged(function() {
-                        Application.activateView('tableviewer');
-                    })
-                    this.panelForm.addControl(bt);
+                    this.panelForm.addControl(
+                        Application.getView('tableviewer').createActivationButton({
+                            content: "Table viewer",
+                            bitmap:DQX.BMP('arrow4down.png')
+                        }));
 
-                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Form demo", bitmap:DQX.BMP('arrow4down.png'), width:120, height:50 });
-                    bt.setOnChanged(function() {
-                        Application.activateView('formdemo');
-                    })
-                    this.panelForm.addControl(bt);
+                    this.panelForm.addControl(
+                        Application.getView('formdemo').createActivationButton({
+                            content: "Form demo",
+                            bitmap:DQX.BMP('arrow4down.png')
+                        }));
+
+                    this.panelForm.addControl(
+                        Application.getView('mapdemo').createActivationButton({
+                            content: "Map demo",
+                            bitmap:DQX.BMP('arrow4down.png')
+                        }));
+
+
 
                     var fu = Controls.FileUpload(null, { serverUrl: MetaData.serverUrl  });
                     fu.setOnChanged(function() {

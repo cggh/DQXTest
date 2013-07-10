@@ -27,8 +27,8 @@ require.config({
 });
 
 
-require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "InfoPopups/SnpPopup"],
-    function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, TableViewer, FormDemo, SnpPopup) {
+require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "InfoPopups/SnpPopup" ],
+    function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, SnpPopup) {
         $(function () {
 
             //Initialise all the popup handlers
@@ -39,6 +39,7 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryMa
             FormDemo.init();
             GenomeBrowser.init();
             TableViewer.init();
+            MapDemo.init();
 
             //Define the header content (top-left of the window)
             Application.setHeader('<a href="http://www.malariagen.net" target="_blank"><img src="Bitmaps/malariagen_logo.png" alt="MalariaGEN logo" align="top" style="border:0px;margin:7px"/></a>');
