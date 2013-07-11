@@ -27,8 +27,12 @@ require.config({
 });
 
 
-require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "InfoPopups/SnpPopup" ],
-    function ($, Application, Framework, Msg, HistoryManager, DQX, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, SnpPopup) {
+
+
+
+
+require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DataFetcher/DataFetchers", "MetaData", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "InfoPopups/SnpPopup" ],
+    function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, SnpPopup) {
         $(function () {
 
             //Initialise all the popup handlers
@@ -47,7 +51,15 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/HistoryMa
             //Provide a hook to fetch some data upfront from the server. Upon completion, 'proceedFunction' should be called;
             Application.customInitFunction = function(proceedFunction) {
                 //Load data here
-                proceedFunction();
+                //Load data here
+                var getter = DataFetchers.ServerDataGetter();
+                getter.addTable('clustersites',['ID', 'Latitude', 'Longitude', 'Name'], 'ID' );
+                getter.addTable('clustermembercount',['ID', 'MaxDist', 'ClusterSize', 'ClusterMemberCount'], 'ID' );
+                getter.execute(MetaData.serverUrl, MetaData.database, function() {
+                    MetaData.clustersites = getter.getTableRecords('clustersites');
+                    MetaData.clustermembercount = getter.getTableRecords('clustermembercount');
+                    proceedFunction();
+                });
             }
 
             //Initialise the application
