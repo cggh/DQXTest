@@ -1,5 +1,5 @@
-define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "MetaData"],
-    function (require, Application, Framework, HistoryManager, Controls, Msg, DocEl, DQX, Map, SVG, MetaData) {
+define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "DQX/MapUtils", "MetaData"],
+    function (require, Application, Framework, HistoryManager, Controls, Msg, DocEl, DQX, Map, SVG, MapUtils, MetaData) {
 
         var MapDemoModule = {
 
@@ -12,6 +12,8 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
+
+
                     rootFrame.makeGroupHor();//Define the root frame as a horizontal layout of member frames
 
                     var leftGroup = rootFrame.addMemberFrame(Framework.FrameGroupVert('', 0.4));
@@ -28,7 +30,9 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                 //This function is called during the initialisation. Create the panels that will populate the frames here
                 that.createPanels = function() {
-                    this.myMap = Map.GMap(this.frameMap, Map.Coord(0, 0), 2);
+
+                    this.myMap = Map.GMap(this.frameMap, Map.Coord(0, 0), 2); // Create the Google Maps object that is drawn in the Map frame
+
 /*
                     var pointset = Map.PointSet('ResistMapSiteMapPointsInactive', this.myMap, 0, "Bitmaps/circle_blue_small.png");
                     var pts = [];
@@ -43,7 +47,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 */
 
                     //Create pie charts
-                    var graphics = Map.MapItemLayouter(this.myMap, 'resistinfo');
                     var clustersites = MetaData.clustersites;
                     var clustermembers = MetaData.clustermembercount;
 
@@ -56,7 +59,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         clustersite.sizes = [];
                         sitesMap[clustersite.ID] = clustersite;
                     });
-
                     $.each(clustermembers,function(idx,members) {
                         if (parseInt(members.MaxDist) == maxdist) {
                             var site = sitesMap[members.ID];
@@ -65,44 +67,48 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         }
                     });
 
+                    // Calculate pie chart radius for each site
                     $.each(clustersites,function(idx,clustersite) {
-                        clustersite.radius = 20.0 * Math.pow(clustersite.sampleCount, 0.35);
+                        clustersite.radius = 40.0 * Math.pow(clustersite.sampleCount, 0.35);
                     });
 
+                    // Create the object that will layout & draw the pie charts on the map
+                    var piecharts = MapUtils.PieChartLayouter(
+                        this.myMap,     // Map object the pie charts will be drawn to
+                        1               // Offset for each pie chart, allowing the layouter to arrange the charts optimally (relative to average pie chart radius)
+                    );
 
                     $.each(clustersites,function(idx,clustersite) {
-                        graphics.addItem(parseFloat(clustersite.Longitude), parseFloat(clustersite.Latitude), clustersite.radius);
-                    })
-
-                    graphics.calculatePositions();
-
-                    $.each(clustersites,function(idx,clustersite) {
-
+                        //Create the pie chart for this site
                         var chart = SVG.PieChart();
+                        chart.clustersite = clustersite; // We will use this in the click callback function
 
+                        //Make sure the site clusters are sorted by size
                         var sizes = clustersite.sizes;
                         sizes.sort(DQX.ByProperty('size'));
 
+                        //Add all the pies to the chart
                         $.each(sizes,function(idx,size) {
-                            var fr = size.size/15.0;
-                            fr=Math.min(fr,1);
-                            var col = DQX.Color(
-                                1,
-                                1-fr*fr,
-                                1-Math.pow(fr,0.75)
-                                );
-                            chart.addPart(size.membercount*1.0/clustersite.sampleCount, col, 'id', 'title');
+                            var fr = Math.min(1,size.size/15.0);
+                            var col = DQX.Color(1,1-fr*fr,1-Math.pow(fr,0.75)); // Create a heat map color according to the cluster size
+                            //Add the pie to the chart
+                            chart.addPart(
+                                size.membercount*1.0/clustersite.sampleCount,                   // Fraction of this pie
+                                col,                                                            // Color of this pie
+                                null,                                                           // Identifier (can be empty)
+                                clustersite.Name+': Cluster size '+size.size+': '+size.membercount+' samples'   // Title (shown when hovering over the pie)
+                            );
                         });
 
-
-
-                        var pie = Map.Overlay.PieChart(that.myMap, "MarkerFreq_" + clustersite.ID,
-                            Map.Coord(graphics.items[idx].longit2, graphics.items[idx].lattit2),
-                            clustersite.radius, chart);
-                        pie.setOrigCoord(Map.Coord(parseFloat(clustersite.Longitude), parseFloat(clustersite.Latitude) ));
-/*                        pie.name = item.Name;
-                        pie.onClick = $.proxy(that._createPopup, that);*/
-
+                        //Add the pie chart to the piechart map layouter
+                        piecharts.addPieChart(
+                            Map.Coord(parseFloat(clustersite.Longitude), parseFloat(clustersite.Latitude) ),    // Geographical coordinates of the center
+                            chart,                          // The actual pie chart
+                            clustersite.radius,             // The displayed radius (in km)
+                            function(theChart, thePieNr) {       // The handler called when a user clicks on a pie
+                                alert('Clicked on chart '+chart.clustersite.Name);
+                            }
+                        );
                     })
 
                 }
