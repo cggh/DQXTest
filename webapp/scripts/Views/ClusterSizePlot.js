@@ -91,10 +91,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                         piecharts.addPieChart(
                             Map.Coord(clustersite.Longitude, clustersite.Latitude ),    // Geographical coordinates of the center
                             chart,                          // The actual pie chart
-                            clustersite.radius,             // The displayed radius (in km)
-                            function(theChart, thePieNr) {       // The handler called when a user clicks on a pie
-                                alert('Clicked on chart '+chart.clustersite.Name);
-                            }
+                            clustersite.radius              // The displayed radius (in km)
                         );
                     })
 
