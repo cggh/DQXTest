@@ -1,5 +1,5 @@
-define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "DQX/MapUtils", "MetaData"],
-    function (require, Application, Framework, HistoryManager, Controls, Msg, DocEl, DQX, Map, SVG, MapUtils, MetaData) {
+define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "DQX/MapUtils", "DQX/Popup", "MetaData"],
+    function (require, Application, Framework, HistoryManager, Controls, Msg, DocEl, DQX, Map, SVG, MapUtils, Popup, MetaData) {
 
         var MapDemoModule = {
 
@@ -31,87 +31,78 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                 //This function is called during the initialisation. Create the panels that will populate the frames here
                 that.createPanels = function() {
 
-                    this.myMap = Map.GMap(this.frameMap, Map.Coord(0, 0), 2); // Create the Google Maps object that is drawn in the Map frame
-
-/*
-                    var pointset = Map.PointSet('ResistMapSiteMapPointsInactive', this.myMap, 0, "Bitmaps/circle_blue_small.png");
-                    var pts = [];
-                    for (var i = 0; i < 100; i++)
-                        pts.push({
-                            id: toString(i),
-                            longit: Math.random()*180 - 90,
-                            lattit: Math.random()*60 - 30,
-                            labelName: 'Label '+ toString(i)
-                        });
-                    pointset.setPoints(pts);
-*/
-
-                    //Create pie charts
-                    var clustersites = MetaData.clustersites;
-                    var clustermembers = MetaData.clustermembercount;
-
-                    var maxdist = 1;
-
-                    //Calculate sample count per site
-                    var sitesMap = {}
-                    $.each(clustersites,function(idx,clustersite) {
-                        clustersite.sampleCount = 0;
-                        clustersite.sizes = [];
-                        sitesMap[clustersite.ID] = clustersite;
-                    });
-                    $.each(clustermembers,function(idx,members) {
-                        if (parseInt(members.MaxDist) == maxdist) {
-                            var site = sitesMap[members.ID];
-                            site.sampleCount += parseInt(members.ClusterMemberCount);
-                            site.sizes.push({size:parseInt(members.ClusterSize), membercount:parseInt(members.ClusterMemberCount)});
-                        }
-                    });
-
-                    // Calculate pie chart radius for each site
-                    $.each(clustersites,function(idx,clustersite) {
-                        clustersite.radius = 40.0 * Math.pow(clustersite.sampleCount, 0.35);
-                    });
-
-                    // Create the object that will layout & draw the pie charts on the map
-                    var piecharts = MapUtils.PieChartLayouter(
-                        this.myMap,     // Map object the pie charts will be drawn to
-                        1               // Offset for each pie chart, allowing the layouter to arrange the charts optimally (relative to average pie chart radius)
+                    // Create the Google Maps object that is drawn in the Map frame
+                    this.myMap = Map.GMap(
+                        this.frameMap,      // Frame this map should be placed in
+                        Map.Coord(0, 0),    // Central point of the initial view
+                        4                   // Google Maps zoom level number of the initial view
                     );
 
-                    $.each(clustersites,function(idx,clustersite) {
-                        //Create the pie chart for this site
-                        var chart = SVG.PieChart();
-                        chart.clustersite = clustersite; // We will use this in the click callback function
+                    that.createSamplePointSet1();
+                    that.createSamplePointSet2();
+                }
 
-                        //Make sure the site clusters are sorted by size
-                        var sizes = clustersite.sizes;
-                        sizes.sort(DQX.ByProperty('size'));
+                that.createSamplePointSet1 = function() {
+                    // This creates a set of points indicated with a bitmap icon, without labels
 
-                        //Add all the pies to the chart
-                        $.each(sizes,function(idx,size) {
-                            var fr = Math.min(1,size.size/15.0);
-                            var col = DQX.Color(1,1-fr*fr,1-Math.pow(fr,0.75)); // Create a heat map color according to the cluster size
-                            //Add the pie to the chart
-                            chart.addPart(
-                                size.membercount*1.0/clustersite.sampleCount,                   // Fraction of this pie
-                                col,                                                            // Color of this pie
-                                null,                                                           // Identifier (can be empty)
-                                clustersite.Name+': Cluster size '+size.size+': '+size.membercount+' samples'   // Title (shown when hovering over the pie)
-                            );
+                    // Instantiate a point set object
+                    var pointset = Map.PointSet(
+                        'Sample_Points1',                   // Identifier for this object on the map
+                        this.myMap,                         // Map object this should be drawn on
+                        0,                                  // Minimum Google Maps zoom level. Below this level, the points will not be drawn
+                        "Bitmaps/circle_blue_small.png"     // Bitmap to draw for each point
+                    );
+                    // Create a vector containing the point data
+                    var pts = [];
+                    for (var i = 0; i < 500; i++)
+                        pts.push({
+                            id: i,                                                                    // Unique identifier for the point
+                            longit: Math.random()*360 - 180,                                                    // Longitude
+                            lattit: ( 0.75 * Math.pow(Math.random()*2-1,3) + 0.25*(Math.random()*2-1) ) * 85   // Lattitude
                         });
-
-                        //Add the pie chart to the piechart map layouter
-                        piecharts.addPieChart(
-                            Map.Coord(parseFloat(clustersite.Longitude), parseFloat(clustersite.Latitude) ),    // Geographical coordinates of the center
-                            chart,                          // The actual pie chart
-                            clustersite.radius,             // The displayed radius (in km)
-                            function(theChart, thePieNr) {       // The handler called when a user clicks on a pie
-                                alert('Clicked on chart '+chart.clustersite.Name);
-                            }
-                        );
-                    })
+                    // Attach the point data vector
+                    pointset.setPoints(pts);
+                    // Define a callback function for when a user clicks a point
+                    pointset.setPointClickCallBack(function(id) {
+                        Popup.create('Info','Point clicked on set 1: '+id);
+                    });
 
                 }
+
+
+                that.createSamplePointSet2 = function() {
+                    // This creates a set of points indicated with a bitmap icon, and with labels
+
+                    // Instantiate a point set object
+                    var pointset = Map.PointSet(
+                        'Sample_Points2',                    // Identifier for this object on the map
+                        this.myMap,                         // Map object this should be drawn on
+                        0,                                  // Minimum Google Maps zoom level. Below this level, the points will not be drawn
+                        "Bitmaps/circle_red_small.png",     // Bitmap to draw for each point
+                        {
+                            showMarkers: true,              // Show marker points
+                            showLabels: true,               // Show labels
+                            labelScaleFactor: 1.5           // Label relative size factor
+                        }
+                    );
+                    // Create a vector containing the point data
+                    var pts = [];
+                    for (var i = 0; i < 40; i++)
+                        pts.push({
+                            id: i,                                                                              // Unique identifier for the point
+                            longit: Math.random()*360 - 180,                                                    // Longitude
+                            lattit: ( 0.75 * Math.pow(Math.random()*2-1,3) + 0.25*(Math.random()*2-1) ) * 85,   // Lattitude
+                            labelName: 'Label '+ i.toString()                                                   // Label of the point
+                        });
+                    // Attach the point data vector
+                    pointset.setPoints(pts);
+                    // Define a callback function for when a user clicks a point
+                    pointset.setPointClickCallBack(function(id) {
+                        Popup.create('Info','Point clicked on set 2: '+id);
+                    });
+
+                }
+
 
 
                 return that;

@@ -46,6 +46,11 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
                             bitmap:DQX.BMP('arrow4down.png')
                         }));
 
+                    this.panelForm.addControl(
+                        Application.getView('clustersizes').createActivationButton({
+                            content: "Cluster sizes map",
+                            bitmap:DQX.BMP('arrow4down.png')
+                        }));
 
 
                     var fu = Controls.FileUpload(null, { serverUrl: MetaData.serverUrl  });
