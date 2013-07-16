@@ -1,5 +1,5 @@
-define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "DQX/MapUtils", "DQX/Popup", "MetaData"],
-    function (require, Application, Framework, HistoryManager, Controls, Msg, DocEl, DQX, Map, SVG, MapUtils, Popup, MetaData) {
+define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "DQX/Map", "DQX/SVG", "DQX/MapUtils", "DQX/Popup", "MetaData"],
+    function (require, Application, Framework, Controls, Msg, DocEl, DQX, Map, SVG, MapUtils, Popup, MetaData) {
 
         var MapDemoModule = {
 
@@ -12,7 +12,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
                 //This function is called during the initialisation. Create the frame structure of the view here
                 that.createFrames = function(rootFrame) {
-
 
                     rootFrame.makeGroupHor();//Define the root frame as a horizontal layout of member frames
 
