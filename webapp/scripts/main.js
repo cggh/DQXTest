@@ -31,12 +31,13 @@ require.config({
 
 
 
-require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DataFetcher/DataFetchers", "MetaData", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "Views/ClusterSizePlot", "InfoPopups/SnpPopup" ],
-    function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, ClusterSizePlot, SnpPopup) {
+require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DataFetcher/DataFetchers", "MetaData", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "Views/ClusterSizePlot", "InfoPopups/SnpPopup", "InfoPopups/PopupFrameDemo" ],
+    function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, ClusterSizePlot, SnpPopup, PopupFrameDemo) {
         $(function () {
 
             //Initialise all the popup handlers
             SnpPopup.init();
+            PopupFrameDemo.init();
 
             //Initialise all the views in the application
             Intro.init();
