@@ -31,12 +31,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     this.panelForm = Framework.Form(this.frameForm);
                     this.panelForm.setPadding(10);
 
-                    // Add a button that creates a popup frame demo
-                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Popup frame demo", bitmap:'Bitmaps/circle_blue_small.png', width:150, height:50 });
-                    bt.setOnChanged(function() {
-                        Msg.send({ type: 'ShowPopupFrameDemo' });
-                    })
-                    this.panelForm.addControl(bt);
 
 
                 }
