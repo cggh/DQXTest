@@ -33,6 +33,12 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     var viewButtons = [];
 
                     viewButtons.push(
+                        Application.getView('formdemo').createActivationButton({
+                            content: "Form demo",
+                            bitmap: 'Bitmaps/circle_red_small.png'
+                        }));
+
+                    viewButtons.push(
                         Application.getView('genomebrowser').createActivationButton({       // View ID
                             content: "Genome browser",                                      // Button text
                             bitmap: 'Bitmaps/circle_red_small.png'                          // Button bitmap
@@ -41,12 +47,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     viewButtons.push(
                         Application.getView('tableviewer').createActivationButton({
                             content: "Table viewer",
-                            bitmap: 'Bitmaps/circle_red_small.png'
-                        }));
-
-                    viewButtons.push(
-                        Application.getView('formdemo').createActivationButton({
-                            content: "Form demo",
                             bitmap: 'Bitmaps/circle_red_small.png'
                         }));
 
@@ -89,12 +89,6 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                         });
                     })
                     buttons.push(bt);
-
-                    var fu = Controls.FileUpload(null, { serverUrl: MetaData.serverUrl  });
-                    fu.setOnChanged(function() {
-                        alert('File uploaded to server file '+fu.getValue());
-                    });
-                    buttons.push(fu);
 
                     // Return a horizontal row containing the buttons
                     return Controls.CompoundHor(buttons);

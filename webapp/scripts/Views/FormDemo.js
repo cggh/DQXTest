@@ -32,21 +32,21 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
 
                 //This function is called during the initialisation. Create the panels that will populate the frames here
                 that.createPanels = function() {
-                    this.panelForm = Framework.Form(this.frameForm);
-                    this.panelForm.setPadding(10);
 
-                    var components = []; // This will accumumate all the components of the form
+                    this.panelForm = Framework.Form(this.frameForm); // Define a Form type panel, attached to the frame this.frameForm
+                    this.panelForm.setPadding(10); // Defines a margin around the content of the form
+
+                    var components = []; // This will accumulate all the components of the form
 
                     components.push(this.CreateExamples());
                     components.push(this.CreateTableLayout());
+                    components.push(this.CreateInteractions());
 
-
-                    // Put all the components on the form, in a vertical layout
-                    this.panelForm.addControl(Controls.CompoundVert(components));
+                    this.panelForm.addControl(Controls.CompoundVert(components)); // Put all the components on the form, in a vertical layout
                 }
 
 
-
+                // Create an example for each type of control available
                 that.CreateExamples = function() {
                     var examples = [];
 
@@ -166,6 +166,17 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     })
                     examples.push(sld);
 
+                    examples.push(Controls.VerticalSeparator(15)); // Introduce a vertical separator
+
+                    // A file upload control
+                    var fu = Controls.FileUpload(null, {
+                        serverUrl: MetaData.serverUrl               // Url of the server where DQXServer is running
+                    });
+                    fu.setOnChanged(function() { // Callback when a file is uploaded
+                        alert('File uploaded to server file. Server file ID = '+fu.getValue());
+                    });
+                    examples.push(fu);
+
                     // Assemble all the controls in a vertical stack, and return the compound element
                     return Controls.CompoundVert(examples)
                         .setLegend('An sample instance of each control')    // Defines a titled box around the controls
@@ -173,15 +184,53 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                 }
 
 
+                // Create some controlled that are arranged on a grid
                 that.CreateTableLayout = function() {
                     var grid = Controls.CompoundGrid();                     // Instruct this compound control to use only the X space required by the members, rather than the full size
                     grid.setAutoFillX(false);                               // Defines a titled box around the controls
-                    grid.setLegend('Some controls layouted as a grid');
+                    grid.setLegend('Some controls arranged on a grid');
                     grid.setItem(0,0,Controls.Static('A static in cell(0,0)'));
                     grid.setItem(1,0,Controls.Check(null, {label:'Check in cell(1,0)', value:true }));
                     grid.setItem(0,1,Controls.Static('A static in cell(0,1)'));
                     grid.setItem(1,1,Controls.Static('A static in cell(1,1)'));
                     return grid;
+                }
+
+
+                // Create some controls that dynamically interact with each other
+                that.CreateInteractions = function() {
+                    var examples = [];
+
+                    //Dynamically change the enabled / disabled state
+                    var chk1 = Controls.Check(null, { label:'Enabled', value:true })
+                    chk1.setOnChanged(function() {
+                        edt1.modifyEnabled(chk1.getValue());
+                    });
+                    var edt1 = Controls.Edit(null, { value:'Edit box', size:30 });
+                    examples.push(Controls.CompoundHor( [ chk1, Controls.HorizontalSeparator(10), edt1 ] ));
+
+                    //Dynamically change the visibility
+                    var chk2 = Controls.Check(null, { label:'Visible', value:true })
+                    chk2.setOnChanged(function() {
+                        showhideWrapper.setVisible(chk2.getValue());
+                    });
+                    var edt2 = Controls.Edit(null, { value:'Edit box', size:30 });
+                    var showhideWrapper = Controls.ShowHide(edt2);
+                    examples.push(Controls.CompoundHor( [ chk2, Controls.HorizontalSeparator(10), showhideWrapper ] ));
+
+                    //Dynamically modify value
+                    var edt3 = Controls.Edit(null, { value:'', size:10 });
+                    var edt4 = Controls.Edit(null, { value:'', size:30 });
+                    edt3.setOnChanged(function() { // Define event listener for content change
+                        edt4.modifyValue('Copied: '+edt3.getValue()); // Modify content of the other edit control
+                    })
+                    examples.push(Controls.CompoundHor( [ edt3, Controls.HorizontalSeparator(10), edt4 ] ));
+
+
+                    // Assemble all the controls in a vertical stack, and return the compound element
+                    return Controls.CompoundVert(examples)
+                        .setLegend('Some examples of interactions between controls')     // Defines a titled box around the controls
+                        .setAutoFillX(false);                                            // Instruct this compound control to use only the X space required by the members, rather than the full size
                 }
 
 
