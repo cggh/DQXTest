@@ -56,11 +56,13 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                             bitmap: 'Bitmaps/circle_red_small.png'
                         }));
 
-                    viewButtons.push(
-                        Application.getView('clustersizes').createActivationButton({
-                            content: "Cluster sizes map",
-                            bitmap: 'Bitmaps/circle_red_small.png'
-                        }));
+                    if (MetaData.showClusterData) {
+                        viewButtons.push(
+                            Application.getView('clustersizes').createActivationButton({
+                                content: "Cluster sizes map",
+                                bitmap: 'Bitmaps/circle_red_small.png'
+                            }));
+                    }
 
                     // Return a horizontal row containing the view buttons
                     return Controls.CompoundHor(viewButtons);

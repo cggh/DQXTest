@@ -45,7 +45,8 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
             GenomeBrowser.init();
             TableViewer.init();
             MapDemo.init();
-            ClusterSizePlot.init();
+            if (MetaData.showClusterData)
+                ClusterSizePlot.init();
 
             //Define the header content (visible in the top-left corner of the window)
             Application.setHeader('<a href="http://www.malariagen.net" target="_blank"><img src="Bitmaps/malariagen_logo.png" alt="MalariaGEN logo" align="top" style="border:0px;margin:7px"/></a>');
@@ -55,26 +56,30 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
             Application.customInitFunction = function(proceedFunction) {
                 // Here, we will fetch the full data of a couple of tables on the servers proactively
                 var getter = DataFetchers.ServerDataGetter();//Instantiate the fetcher object
-                // Declare a first table for fetching
-                getter.addTable(
-                    'clustersites',                             // Name of the database table
-                    [                                           // List of table columns (can be just names, or an object specifying id:column_name, tpe: data_type
-                        'ID',
-                        { id: 'Latitude', tpe: 'float' },
-                        { id: 'Longitude', tpe: 'float' },
-                        'Name'
-                    ],
-                    'ID'                                        // Column used for sorting the records
-                );
-                // Declare a second table for fetching
-                getter.addTable('clustermembercount',['ID', { id: 'MaxDist', tpe: 'int' }, { id: 'ClusterSize', tpe: 'int' }, { id: 'ClusterMemberCount', tpe: 'int' } ], 'ID' );
+                if (MetaData.showClusterData) {
+                    // Declare a first table for fetching
+                    getter.addTable(
+                        'clustersites',                             // Name of the database table
+                        [                                           // List of table columns (can be just names, or an object specifying id:column_name, tpe: data_type
+                            'ID',
+                            { id: 'Latitude', tpe: 'float' },
+                            { id: 'Longitude', tpe: 'float' },
+                            'Name'
+                        ],
+                        'ID'                                        // Column used for sorting the records
+                    );
+                    // Declare a second table for fetching
+                    getter.addTable('clustermembercount',['ID', { id: 'MaxDist', tpe: 'int' }, { id: 'ClusterSize', tpe: 'int' }, { id: 'ClusterMemberCount', tpe: 'int' } ], 'ID' );
+                }
                 // Execute the fetching
                 getter.execute(
                     MetaData.serverUrl,             // Url where DQXServer is running
                     MetaData.database,              // Name of the database
                     function() {                    // Callback function that is called when all tables are fetched
-                        MetaData.clustersites = getter.getTableRecords('clustersites');                     // Store the result in the metadata
-                        MetaData.clustermembercount = getter.getTableRecords('clustermembercount');
+                        if (MetaData.showClusterData) {
+                            MetaData.clustersites = getter.getTableRecords('clustersites');                     // Store the result in the metadata
+                            MetaData.clustermembercount = getter.getTableRecords('clustermembercount');
+                        }
                         proceedFunction();                                                                  // Proceed with the initialisation
                     }
                 );

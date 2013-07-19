@@ -3,8 +3,8 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
         var MetaData = {};
 
 
-        MetaData.serverUrl="http://localhost:8000/app01";
-        //MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server_test/app";
+        //MetaData.serverUrl="http://localhost:8000/app01";
+        MetaData.serverUrl="http://panoptes.cggh.org/sandbox/dqx_server_test/app";
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Data source tables
@@ -39,6 +39,7 @@ define(["DQX/Utils", "DQX/Controls", "DQX/Msg", "DQX/Popup"],
         ];
         $.each(MetaData.chromosomes, function (idx, chr) { chr.name = chr.id; });
 
+        MetaData.showClusterData = false;
 
         MetaData.populations=[
             { freqid:'NRAF_WAF', name:"West Africa", color:DQX.Color(1,0,0) },
