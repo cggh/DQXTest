@@ -31,8 +31,8 @@ require.config({
 
 
 
-require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DataFetcher/DataFetchers", "MetaData", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "Views/ClusterSizePlot", "InfoPopups/SnpPopup", "InfoPopups/PopupFrameDemo" ],
-    function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, ClusterSizePlot, SnpPopup, PopupFrameDemo) {
+require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DataFetcher/DataFetchers", "MetaData", "Views/Intro", "Views/GenomeBrowser", "Views/TableViewer", "Views/FormDemo", "Views/MapDemo", "Views/ClusterSizePlot", "InfoPopups/SnpPopup", "InfoPopups/PopupFrameDemo", "InfoPopups/WizardDemo" ],
+    function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, ClusterSizePlot, SnpPopup, PopupFrameDemo, WizardDemo) {
         $(function () {
 
 
@@ -48,6 +48,7 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
             // Initialise all the popup handlers
             SnpPopup.init();
             PopupFrameDemo.init();
+            WizardDemo.init();
 
             // Create a custom 'navigation button' that will appear in the right part of the app header
             Application.addNavigationButton('Test','Bitmaps/Icons/Small/MagGlassG.png', 80, function(){

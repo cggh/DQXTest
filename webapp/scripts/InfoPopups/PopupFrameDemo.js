@@ -5,11 +5,16 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
         };
 
         PopupFrameDemo.init = function() {
-            //Initiase the event listener
-            Msg.listen('', { type: 'ShowPopupFrameDemo' }, function (context, snpid) {
-                var theFrame = PopupFrameDemo.Frame(); // Instantiate the popupframe object
-                theFrame.create(); // Create the popup and renders it to the DOM tree
-            });
+            //Initialise the event listener
+            Msg.listen('',
+                {
+                    type: 'ShowPopupFrameDemo' // ID of the event
+                },
+                function () { // Function executed when the message was received
+                    var theFrame = PopupFrameDemo.Frame(); // Instantiate the popupframe object
+                    theFrame.create(); // Create the popup and renders it to the DOM tree
+                }
+            );
         }
 
         //The Popup frame object
@@ -44,6 +49,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
             }
 
             that.createPanelForm = function() {
+                // Create a form-type panel and attach it to the frame this.frame1
                 this.panelForm = Framework.Form(this.frame1);
                 this.panelForm.setPadding(10);
 

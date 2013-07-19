@@ -73,9 +73,23 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     var buttons = [];
 
                     // Add a button that creates a popup frame demo
-                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Popup frame demo", bitmap:'Bitmaps/circle_blue_small.png', width:120, height:50 });
+                    var bt = Controls.Button(null, {
+                        buttonClass: 'DQXToolButton2',
+                        content: "Popup frame demo",
+                        bitmap:'Bitmaps/circle_blue_small.png',
+                        width:120, height:50
+                    });
+                    bt.setOnChanged(function() { // Define an event handler called when the user clicks this button
+                        Msg.send({ type: // Send a message. The event listener for this message will react by showing the popup
+                            'ShowPopupFrameDemo' // Message ID
+                        });
+                    })
+                    buttons.push(bt);
+
+                    // Add a button that creates a wizard demo
+                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Wizard demo", bitmap:'Bitmaps/circle_blue_small.png', width:120, height:50 });
                     bt.setOnChanged(function() {
-                        Msg.send({ type: 'ShowPopupFrameDemo' });
+                        Msg.send({ type: 'ShowWizardDemo' });
                     })
                     buttons.push(bt);
 
