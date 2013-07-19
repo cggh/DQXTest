@@ -38,7 +38,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
             WizardDemo.theWizard.addPage({
                 id: 'page1',                            // ID of this page
-                helpUrl: 'Doc/WizardDemo/Help.htm',     // Document url containing a help page for this wizard
+                helpUrl: 'Doc/Help/WizardDemo.html',    // Document url containing a help page for this wizard (optional)
                 form: theControls                       // Compound control that defines the form on this page
             });
 
@@ -61,7 +61,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
 
             WizardDemo.theWizard.addPage({
                 id: 'page2',                            // ID of this page
-                helpUrl: 'Doc/WizardDemo/Help.htm',     // Document url containing a help page for this wizard
+                helpUrl: 'Doc/Help/WizardDemo.html',    // Document url containing a help page for this wizard
                 form: theControls                       // Compound control that defines the form on this page
             });
 
