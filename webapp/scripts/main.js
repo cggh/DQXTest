@@ -35,11 +35,8 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
     function ($, Application, Framework, Msg, DQX, DataFetchers, MetaData, Intro, GenomeBrowser, TableViewer, FormDemo, MapDemo, ClusterSizePlot, SnpPopup, PopupFrameDemo) {
         $(function () {
 
-            //Initialise all the popup handlers
-            SnpPopup.init();
-            PopupFrameDemo.init();
 
-            //Initialise all the views in the application
+            // Initialise all the views in the application
             Intro.init();
             FormDemo.init();
             GenomeBrowser.init();
@@ -47,6 +44,16 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
             MapDemo.init();
             if (MetaData.showClusterData)
                 ClusterSizePlot.init();
+
+            // Initialise all the popup handlers
+            SnpPopup.init();
+            PopupFrameDemo.init();
+
+            // Create a custom 'navigation button' that will appear in the right part of the app header
+            Application.addNavigationButton('Test','Bitmaps/Icons/Small/MagGlassG.png', 80, function(){
+                alert('Navigation button clicked');
+            });
+
 
             //Define the header content (visible in the top-left corner of the window)
             Application.setHeader('<a href="http://www.malariagen.net" target="_blank"><img src="Bitmaps/malariagen_logo.png" alt="MalariaGEN logo" align="top" style="border:0px;margin:7px"/></a>');
