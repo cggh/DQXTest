@@ -82,7 +82,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     //Fill with channels
 
                     //Define a channel displaying the reference sequence
-                    this.panelBrowser.addChannel(ChannelSequence.Channel(serverUrl, MetaData.summaryFolder+'/'+'Sequence', 'Summ01'), true);
+                    this.panelBrowser.addChannel(ChannelSequence.Channel(MetaData.serverUrl, MetaData.summaryFolder+'/'+'Sequence', 'Summ01'), true);
 
                     that.createSnpPositionChannel();
                     that.createFrequencyChannels();

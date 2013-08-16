@@ -106,6 +106,25 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     })
                     buttons.push(bt);
 
+
+                    var bt = Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Test custom action", bitmap:'Bitmaps/circle_blue_small.png', width:120, height:50 });
+                    bt.setOnChanged(function() {
+                        var datastring='';
+                        for (var i=0; i<1500; i++)
+                            datastring+='AC01';
+                        DQX.customRequest(
+                            MetaData.serverUrl,
+                            'uploadtracks',
+                            'test',
+                            {a:1,b:2},
+                            function(resp) {
+                                alert(JSON.stringify(resp));
+                            }
+                        );
+                    })
+                    buttons.push(bt);
+
+
                     // Return a horizontal row containing the buttons
                     return Controls.CompoundHor(buttons);
                 }

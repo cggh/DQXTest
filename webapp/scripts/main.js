@@ -1,5 +1,5 @@
 
-//Versionstring is supposed to be defines in main.html
+//Versionstring is supposed to be defined in main.html
 //It is used to differentiate different versions, preventing them from being cached
 if (typeof versionString == 'undefined')
     alert('Fatal error: versionString is missing');
@@ -77,7 +77,11 @@ require(["jquery", "DQX/Application", "DQX/Framework", "DQX/Msg", "DQX/Utils", "
                         'ID'                                        // Column used for sorting the records
                     );
                     // Declare a second table for fetching
-                    getter.addTable('clustermembercount',['ID', { id: 'MaxDist', tpe: 'int' }, { id: 'ClusterSize', tpe: 'int' }, { id: 'ClusterMemberCount', tpe: 'int' } ], 'ID' );
+                    getter.addTable(
+                        'clustermembercount',
+                        ['ID', { id: 'MaxDist', tpe: 'int' }, { id: 'ClusterSize', tpe: 'int' }, { id: 'ClusterMemberCount', tpe: 'int' } ],
+                        'ID'
+                    );
                 }
                 // Execute the fetching
                 getter.execute(
