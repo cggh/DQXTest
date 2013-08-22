@@ -120,7 +120,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/Controls", "DQX/Msg"
                     comp.setToolTip('SNP identifier');  // Hover tooltip
                     // Define a handler that will be called when a user clicks this column (note: this will turn this field into a hyperlink)
                     comp.setCellClickHandler(function(fetcher,downloadrownr) {
-                        var snpid = fetcher.getColumnPoint(downloadrownr, 'snpid');  // get the snp id from the datafetcher
+                        var snpid=that.panelTable.getTable().getCellValue(downloadrownr,"snpid");
                         Msg.send({ type: 'ShowSNPPopup' }, snpid); // Send a message that should trigger showing the snp popup
                     })
 
