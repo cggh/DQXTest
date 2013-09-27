@@ -7,7 +7,7 @@ define(["require", "DQX/Application", "DQX/Framework", "DQX/HistoryManager", "DQ
         // Initialise the wizard
         WizardDemo.init = function() {
             //Create the wizard instance
-            WizardDemo.theWizard = Wizard.Create(
+            WizardDemo.theWizard = e(
                 "WizardDemo",                         // ID of the wizard
                 {
                     title: "Wizard demo",             // Wizard title
