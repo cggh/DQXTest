@@ -1,13 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+
     <meta http-equiv="Expires" content="-1" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
+
     <title></title>
+
+    <!-- The DQX standard style sheet -->
     <link href="scripts/DQX/DQXCommon.css" rel="stylesheet" type="text/css" />
 
     <!-- Introduce a version number to avoid cache problems between versions-->
@@ -17,29 +21,36 @@
     </script>
 
     <script src="scripts/DQX/Externals/modernizr.custom.43738.js"></script>
+
+    <!-- Required for the Google Maps API -->
     <script src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false" type="text/javascript"></script>
-    <script src="scripts/Local/_SetServerUrl.js" type="text/javascript"></script>
+
+    <!-- Load the main script through RequireJS -->
     <script data-main="scripts/main" src="scripts/require.js" type="text/javascript"></script>
-    <!--<script data-main="scripts/main-built" src="scripts/require.js" type="text/javascript"></script>-->
 
 </head>
 <body style="margin:0px;">
 
+<!-- On startup, the only visible html element is a 'page loading' icon  -->
 <div id="Div1" style="width:100%;height:100%;background-color:rgb(255,255,255);">
     <div style="position:fixed;top:50%;left:50%;margin-top:-100px;margin-left:-30px">
         <h2>Loading page...</h2>
         <img src="Bitmaps/ProgressAnimation3.gif" alt="Progress animation" />
     </div>
 </div>
-<!--The following div needs to be present for system usage:-->
+
+<!-- The following div needs to be present for DQX system usage -->
 <div id="DQXUtilContainer" ></div>
 
 
 
+
+
+
+
 <!--------------------------------------------------------------------------------------------------------------
- ---------------------------------------------------------------------------------------------------------------
  Text interpolation snippets
- ---------------------------------------------------------------------------------------------------------------
+ Can be used in conjunction with string.DQXinterpolate()
  --------------------------------------------------------------------------------------------------------------->
 <div id="InterpolationSnippets" style="display:none">
 </div>
@@ -59,14 +70,5 @@
 </div>
 
 
-
-<!--------------------------------------------------------------------------------------------------------------
- ---------------------------------------------------------------------------------------------------------------
- Text snippets
- ---------------------------------------------------------------------------------------------------------------
- --------------------------------------------------------------------------------------------------------------->
-<div id="Snippets" style="display:none">
-
-</div>
 
 </body>

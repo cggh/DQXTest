@@ -4,7 +4,7 @@
 if (typeof versionString == 'undefined')
     alert('Fatal error: versionString is missing');
 
-//Configuration of require.js
+//Configuration parameters for require.js
 require.config({
     baseUrl: "scripts",
     paths: {
